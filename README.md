@@ -24,7 +24,7 @@ for you, making strong authentication much easier to implement in your app.
 
 ## Requirements
 In order to run any of the samples you will need to create an OpenId Connect
-app in your OneLogin Admin portal. You can [read more about how to do that here]()https://developers.onelogin.com/openid-connect/connect-to-onelogin.
+app in your OneLogin Admin portal. You can [read more about how to do that here](https://developers.onelogin.com/openid-connect/connect-to-onelogin).
 
 If you don't have a OneLogin developer account [you can sign up here](https://www.onelogin.com/developer-signup).
 
