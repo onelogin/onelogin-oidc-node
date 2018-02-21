@@ -1,0 +1,20 @@
+<a href="/users/profile">Profile</a> | <a href="/logout">Logout</a>
+<h1>{{title}}</h1>
+<p>Hi {{user.name.givenName}}</p>
+<p>
+  This is a protected page so if you can see it then
+  you must have successfully authenticated via OneLogin. 🎉
+</p>
+<ul>
+  <li>
+    <p>
+      Try the <a href="/users/profile">profile</a> route to see the full profile for this user.
+    </p>
+  </li>
+  <li>
+    <p>
+      Or <a href="/logout">logout</a> to destroy the local session and revoke the access
+      token at OneLogin
+    </p>
+  </li>
+</ul>
