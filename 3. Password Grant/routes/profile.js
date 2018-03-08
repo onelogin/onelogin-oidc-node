@@ -12,8 +12,6 @@ router.get('/', function(req, res, next) {
     uri: `https://${process.env.ONELOGIN_SUBDOMAIN}.onelogin.com/oidc/me`
   };
 
-console.log(options);
-
   request(options, function(error, response, body){
 
     let user = JSON.parse(body);
