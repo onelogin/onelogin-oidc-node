@@ -1,0 +1,15 @@
+<h1>Currently Authenticated User</h1>
+
+<h2>Standard Attributes</h2>
+{{#each user}}
+  <div class="profile">
+    <span>{{@key}}:</span> {{this}}
+  </div>
+{{/each}}
+
+<h2>Custom Attributes</h2>
+{{#each user.custom_fields}}
+  <div class="profile">
+    <span>{{@key}}:</span> {{this}}
+  </div>
+{{/each}}

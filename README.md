@@ -4,6 +4,7 @@ This repo contains Node.js sample apps that demonstrate the various OpenId Conne
 
 1. Auth Flow - An Express + Passport app example
 2. Implicit Flow - A Single Page App (SPA) example
+3. Password Grant - A sample using the Resource Owner Password Grant
 
 ## What can I use these for
 OpenId Connect is a great way to add user authentication to your application
