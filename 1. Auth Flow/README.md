@@ -1,4 +1,4 @@
-# OneLogin OpenId Connect Implicit Flow Sample
+# OneLogin OpenId Connect Authorization Code Flow Sample
 
 The sample is an [Express.js](https://expressjs.com/) app that uses
 [Passport.js](http://www.passportjs.org/) and the [Passport-OpenIdConnect](https://github.com/jaredhanson/passport-openidconnect)
