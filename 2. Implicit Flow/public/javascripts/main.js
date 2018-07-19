@@ -6,11 +6,10 @@ Oidc.Log.level = Oidc.Log.INFO;
 //
 // OIDC Client Configuration
 //
-const ONELOGIN_SUBDOMAIN = 'replace-me';
-const ONELOGIN_CLIENT_ID = 'replace-me';
+const ONELOGIN_CLIENT_ID = '9a6d6350-2af8-0136-197b-06acc76d34b492920';
 
 var settings = {
-    authority: 'https://' + ONELOGIN_SUBDOMAIN + '.onelogin.com/oidc',
+    authority: 'https://openid-connect.onelogin.com/oidc',
     client_id: ONELOGIN_CLIENT_ID,
     redirect_uri: window.location.origin,
     response_type: 'id_token token',

@@ -5,6 +5,8 @@ This repo contains Node.js sample apps that demonstrate the various OpenId Conne
 1. Auth Flow - An Express + Passport app example
 2. Implicit Flow - A Single Page App (SPA) example
 3. Password Grant - A sample using the Resource Owner Password Grant
+4. Auth Flow - Using automatic discovery
+5. Auth Flow - Using PKCE for native/mobile apps
 
 ## What can I use these for
 OpenId Connect is a great way to add user authentication to your application
@@ -30,12 +32,6 @@ app in your OneLogin Admin portal. You can [read more about how to do that here]
 If you don't have a OneLogin developer account [you can sign up here](https://www.onelogin.com/developer-signup).
 
 ### Local testing
-By default these samples will run on `http://localhost:3000` but since localhost
-is not supported by the OIDC spec you will need to use a tool like [Ngrok](https://ngrok.com/)
-for local testing.
+By default these samples will run on `http://localhost:3000`.
 
-Install ngrok using `npm install -g ngrok` then run `ngrok http 3000` and Ngrok will
-give you a public HTTPS url that you can browse to and see your local app.
-
-You will need to set this Ngrok url as the **redirect_uri** in your OneLogin OIDC app
-via the Admin portal.
+You will need to add your callback url to the list of approved **Redirect URIs** for your OneLogin OIDC app via the Admin portal. e.g. `http://localhost:3000/oauth/callback`
