@@ -12,45 +12,23 @@ var session = require('express-session');
 // Use Passport with OpenId Connect strategy to
 // authenticate users with OneLogin
 var passport = require('passport')
-var OneLoginStrategy = require('passport-openidconnect').Strategy
+var OneLoginStrategy = require('passport-openid-connect').Strategy
+var User = require('passport-openid-connect').User
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-const OIDC_BASE_URI = `https://openid-connect.onelogin.com/oidc`;
-
-// Configure the OpenId Connect Strategy
-// with credentials obtained from OneLogin
-passport.use(new OneLoginStrategy({
-  issuer: OIDC_BASE_URI,
-  clientID: process.env.OIDC_CLIENT_ID,
-  clientSecret: process.env.OIDC_CLIENT_SECRET,
-  authorizationURL: `${OIDC_BASE_URI}/auth`,
-  userInfoURL: `${OIDC_BASE_URI}/me`,
-  tokenURL: `${OIDC_BASE_URI}/token`,
-  callbackURL: process.env.OIDC_REDIRECT_URI,
-  passReqToCallback: true
-},
-function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
-
-  console.log('issuer:', issuer);
-  console.log('userId:', userId);
-  console.log('accessToken:', accessToken);
-  console.log('refreshToken:', refreshToken);
-  console.log('params:', params);
-
-  req.session.accessToken = accessToken;
-
-  return cb(null, profile);
-}));
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
+var oic = new OneLoginStrategy({
+  issuerHost: "https://openid-connect.onelogin.com/oidc", // For EU instances use "https://openid-connect-eu.onelogin.com/oidc"
+  client_id: process.env.OIDC_CLIENT_ID,
+  redirect_uri: process.env.OIDC_REDIRECT_URI,
+  scope: "openid email profile",
+  usePKCE: "S256" // Configure the strategy to use PKCE
 });
 
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
+passport.use(oic)
+passport.serializeUser(OneLoginStrategy.serializeUser)
+passport.deserializeUser(OneLoginStrategy.deserializeUser)
 
 var app = express();
 
@@ -95,14 +73,14 @@ app.use('/users', checkAuthentication, users);
 // Initiates an authentication request with OneLogin
 // The user will be redirect to OneLogin and once authenticated
 // they will be returned to the callback handler below
-app.get('/login', passport.authenticate('openidconnect', {
+app.get('/login', passport.authenticate('passport-openid-connect', {
   successReturnToOrRedirect: "/",
   scope: 'email profile'
 }));
 
 // Callback handler that OneLogin will redirect back to
 // after successfully authenticating the user
-app.get('/oauth/callback', passport.authenticate('openidconnect', {
+app.get('/oauth/callback', passport.authenticate('passport-openid-connect', {
   callback: true,
   successReturnToOrRedirect: '/users',
   failureRedirect: '/'
