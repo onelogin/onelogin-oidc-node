@@ -10,25 +10,53 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 
 // Use Passport with OpenId Connect strategy to
-// authenticate users with OneLogin
+// authenticate users with OneLogin using Auth Code Flow + PKCE
 var passport = require('passport')
-var OneLoginStrategy = require('passport-openid-connect').Strategy
-var User = require('passport-openid-connect').User
+const { Strategy } = require('openid-client');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-var oic = new OneLoginStrategy({
-  issuerHost: "https://openid-connect.onelogin.com/oidc", // For EU instances use "https://openid-connect-eu.onelogin.com/oidc"
-  client_id: process.env.OIDC_CLIENT_ID,
-  redirect_uri: process.env.OIDC_REDIRECT_URI,
-  scope: "openid email profile",
-  usePKCE: "S256" // Configure the strategy to use PKCE
+const { Issuer } = require('openid-client');
+Issuer.discover('https://openid-connect.onelogin.com/oidc') // => Promise
+  .then(function (issuer) {
+    console.log('Discovered issuer %s', issuer);
+
+    const client = new issuer.Client({
+      client_id: process.env.OIDC_CLIENT_ID
+    });
+
+    const params = {
+      client_id: process.env.OIDC_CLIENT_ID,
+      redirect_uri: process.env.OIDC_REDIRECT_URI,
+      scope: "openid email profile",
+    }
+
+    const passReqToCallback = false; // optional, defaults to false, when true req is passed as a first
+                                     // argument to verify fn
+
+    const usePKCE = 'S256'; // optional, defaults to false, when true the code_challenge_method will be
+                          // resolved from the issuer configuration, instead of true you may provide
+                          // any of the supported values directly, i.e. "S256" (recommended) or "plain"
+
+    passport.use('oidc', new Strategy({ client, params, passReqToCallback, usePKCE }, (tokenset, userinfo, done) => {
+      console.log('tokenset', tokenset);
+      console.log('access_token', tokenset.access_token);
+      console.log('id_token', tokenset.id_token);
+      console.log('claims', tokenset.claims);
+      console.log('userinfo', userinfo);
+
+      return done(null, userinfo)
+    }));
+  });
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
 });
 
-passport.use(oic)
-passport.serializeUser(OneLoginStrategy.serializeUser)
-passport.deserializeUser(OneLoginStrategy.deserializeUser)
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
 var app = express();
 
@@ -73,14 +101,13 @@ app.use('/users', checkAuthentication, users);
 // Initiates an authentication request with OneLogin
 // The user will be redirect to OneLogin and once authenticated
 // they will be returned to the callback handler below
-app.get('/login', passport.authenticate('passport-openid-connect', {
-  successReturnToOrRedirect: "/",
-  scope: 'email profile'
+app.get('/login', passport.authenticate('oidc', {
+  successReturnToOrRedirect: "/"
 }));
 
 // Callback handler that OneLogin will redirect back to
 // after successfully authenticating the user
-app.get('/oauth/callback', passport.authenticate('passport-openid-connect', {
+app.get('/oauth/callback', passport.authenticate('oidc', {
   callback: true,
   successReturnToOrRedirect: '/users',
   failureRedirect: '/'
