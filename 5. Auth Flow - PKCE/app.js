@@ -23,13 +23,14 @@ Issuer.discover('https://openid-connect.onelogin.com/oidc') // => Promise
     console.log('Discovered issuer %s', issuer);
 
     const client = new issuer.Client({
-      client_id: process.env.OIDC_CLIENT_ID
+      client_id: process.env.OIDC_CLIENT_ID,
+      token_endpoint_auth_method: 'none'
     });
 
     const params = {
       client_id: process.env.OIDC_CLIENT_ID,
       redirect_uri: process.env.OIDC_REDIRECT_URI,
-      scope: "openid email profile",
+      scope: 'openid email profile',
     }
 
     const passReqToCallback = false; // optional, defaults to false, when true req is passed as a first
