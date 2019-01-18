@@ -23,7 +23,7 @@ var oic = new OneLoginStrategy({
   client_id: process.env.OIDC_CLIENT_ID,
   client_secret: process.env.OIDC_CLIENT_SECRET,
   redirect_uri: process.env.OIDC_REDIRECT_URI,
-  scope: "openid email profile"
+  scope: "openid profile"
 });
 
 passport.use(oic)
@@ -75,7 +75,7 @@ app.use('/users', checkAuthentication, users);
 // they will be returned to the callback handler below
 app.get('/login', passport.authenticate('passport-openid-connect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile'
+  scope: 'profile'
 }));
 
 // Callback handler that OneLogin will redirect back to

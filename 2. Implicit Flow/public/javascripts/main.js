@@ -13,7 +13,7 @@ var settings = {
     client_id: ONELOGIN_CLIENT_ID,
     redirect_uri: window.location.origin,
     response_type: 'id_token token',
-    scope: 'openid profile email',
+    scope: 'openid profile',
 
     filterProtocolClaims: true,
     loadUserInfo: true
