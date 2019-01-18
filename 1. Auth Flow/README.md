@@ -16,6 +16,8 @@ app in your OneLogin Admin portal.
 
 If you don't have a OneLogin developer account [you can sign up here](https://www.onelogin.com/developer-signup).
 
+Note: This sample uses the `POST` method for retrieving an `access_token`. Make sure you set the **Token Endpoint Authentication Method** in your OneLogin OIDC Application to **POST**.
+
 1. Clone this repo
 2. Rename `.env.sample` to `.env` and update the **client_id** and
 **client_secret** you obtained from OneLogin as well as the Redirect Uri of your local site.
