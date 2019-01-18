@@ -97,7 +97,7 @@ app.use('/users', checkAuthentication, users);
 // they will be returned to the callback handler below
 app.get('/login', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'email profile'
+  scope: 'profile'
 }));
 
 // Callback handler that OneLogin will redirect back to

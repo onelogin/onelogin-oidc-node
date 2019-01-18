@@ -26,7 +26,7 @@ router.post('/login', function(req, res, next) {
   //     grant_type: 'password',
   //     username: req.body.username,
   //     password: req.body.password,
-  //     scope: 'openid profile email'
+  //     scope: 'openid profile'
   //   }
   // };
 
@@ -42,7 +42,7 @@ router.post('/login', function(req, res, next) {
       grant_type: 'password',
       username: req.body.username,
       password: req.body.password,
-      scope: 'openid profile email',
+      scope: 'openid profile',
       response_type: 'id_token'
     }
   };
