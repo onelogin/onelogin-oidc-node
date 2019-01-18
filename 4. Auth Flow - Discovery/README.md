@@ -1,8 +1,10 @@
-# OneLogin OpenId Connect Authorization Code Flow Sample
+# OneLogin OpenId Connect Auth Flow with Discovery
 
 The sample is an [Express.js](https://expressjs.com/) app that uses
-[Passport.js](http://www.passportjs.org/) and the [Passport-OpenIdConnect](https://github.com/jaredhanson/passport-openidconnect)
+[Passport.js](http://www.passportjs.org/) and the [Passport-OpenId-Connect](https://www.npmjs.com/package/passport-openid-connect)
 module for managing user authentication.
+
+It uses the OpenId Connect issuer to fetch metadata and endpoints required for auth and token exhange etc.
 
 The sample tries to keep everything as simple as possible so only
 implements

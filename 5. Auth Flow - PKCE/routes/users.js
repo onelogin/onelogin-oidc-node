@@ -22,7 +22,7 @@ router.get('/profile', function(req, res, next) {
 
   request.get(`https://openid-connect.onelogin.com/oidc/me`, {
     'auth': {
-      'bearer': req.session.accessToken
+      'bearer': req.user.token.access_token
     }
   },function(err, respose, body){
 

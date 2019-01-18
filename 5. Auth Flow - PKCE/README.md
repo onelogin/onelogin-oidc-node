@@ -1,8 +1,10 @@
-# OneLogin OpenId Connect Authorization Code Flow Sample
+# OneLogin OpenId Connect Auth Flow with PKCE
 
 The sample is an [Express.js](https://expressjs.com/) app that uses
-[Passport.js](http://www.passportjs.org/) and the [Passport-OpenIdConnect](https://github.com/jaredhanson/passport-openidconnect)
+[Passport.js](http://www.passportjs.org/) and the [Passport-OpenId-Connect](https://www.npmjs.com/package/passport-openid-connect)
 module for managing user authentication.
+
+It uses the OpenId Connect Auth Flow + Proof Key Code Exchange (PKCE) which is best suited to native/mobile apps where you do not want to embed the **client_secret** in your app.
 
 The sample tries to keep everything as simple as possible so only
 implements
@@ -17,8 +19,7 @@ app in your OneLogin Admin portal.
 If you don't have a OneLogin developer account [you can sign up here](https://www.onelogin.com/developer-signup).
 
 1. Clone this repo
-2. Rename `.env.sample` to `.env` and update the **client_id** and
-**client_secret** you obtained from OneLogin as well as the Redirect Uri of your local site.
+2. Rename `.env.sample` to `.env` and update the **client_id** and **redirect_uri** for your app.
 
 *You need to make sure that the Redirect URI matches what you specified as the
 Redirect Uri when you setup your OIDC app connector in the OneLogin portal.*
