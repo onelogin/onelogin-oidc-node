@@ -9,7 +9,7 @@ Oidc.Log.level = Oidc.Log.INFO;
 const ONELOGIN_CLIENT_ID = '9a6d6350-2af8-0136-197b-06acc76d34b492920';
 
 var settings = {
-    authority: 'https://openid-connect.onelogin.com/oidc',
+    authority: 'https://openid-connect.onelogin.com/oidc',    // For EU instances use https://openid-connect-eu.onelogin.com/oidc
     client_id: ONELOGIN_CLIENT_ID,
     redirect_uri: window.location.origin,
     response_type: 'id_token token',

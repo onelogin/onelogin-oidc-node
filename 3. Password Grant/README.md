@@ -21,7 +21,7 @@ This is where the user authentication takes place. On success you will get an `a
 ```js
 let options = {
   method: 'POST',
-  uri: `https://openid-connect.onelogin.com/oidc/token`,
+  uri: `https://openid-connect.onelogin.com/oidc/token`,  // EU instance: https://openid-connect-eu.onelogin.com/oidc/token
   form: {
     client_id: process.env.OIDC_CLIENT_ID,
     client_secret: process.env.OIDC_CLIENT_SECRET,
@@ -57,7 +57,7 @@ let options = {
   auth: {
     bearer: req.session.accessToken
   },
-  uri: `https://openid-connect.onelogin.com/oidc/me`
+  uri: `https://openid-connect.onelogin.com/oidc/me`  // EU instance: https://openid-connect-eu.onelogin.com/oidc/me
 };
 
 request(options, function(error, response, body){
