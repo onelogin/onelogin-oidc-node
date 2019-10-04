@@ -35,7 +35,7 @@ router.post('/login', function(req, res, next) {
   // are specified in the post body
   let options = {
     method: 'POST',
-    uri: `https://openid-connect.onelogin.com/oidc/token`, // For EU instances use "https://openid-connect-eu.onelogin.com/oidc/token"
+    uri: 'https://openid-connect.onelogin.com/oidc/token', // For EU instances use "https://openid-connect-eu.onelogin.com/oidc/token"
     form: {
       client_id: process.env.OIDC_CLIENT_ID,
       client_secret: process.env.OIDC_CLIENT_SECRET,

@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
     auth: {
       bearer: req.session.accessToken
     },
-    uri: `https://openid-connect.onelogin.com/oidc/me`
+    uri: `https://openid-connect.onelogin.com/oidc/me`   // For EU instances use https://openid-connect-eu.onelogin.com/oidc/me
   };
 
   request(options, function(error, response, body){

@@ -90,7 +90,7 @@ app.get('/oauth/callback', passport.authenticate('passport-openid-connect', {
 // revoke the access_token at OneLogin
 app.get('/logout', function(req, res){
 
-  request.post(`https://openid-connect.onelogin.com/oidc/token/revocation`, {
+  request.post('https://openid-connect.onelogin.com/oidc/token/revocation', {  // For EU instances use "https://openid-connect-eu.onelogin.com/oidc/token/revocation
     'form':{
       'client_id': process.env.OIDC_CLIENT_ID,
       'client_secret': process.env.OIDC_CLIENT_SECRET,

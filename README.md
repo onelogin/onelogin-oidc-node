@@ -35,3 +35,7 @@ If you don't have a OneLogin developer account [you can sign up here](https://ww
 By default these samples will run on `http://localhost:3000`.
 
 You will need to add your callback url to the list of approved **Redirect URIs** for your OneLogin OIDC app via the Admin portal. e.g. `http://localhost:3000/oauth/callback`
+
+### US and EU instances ###
+
+Examples use as base URL for OIDC endpoints: `https://openid-connect.onelogin.com/oidc`. If you are using an EU instance, use instead the value `https://openid-connect-eu.onelogin.com/oidc`.
