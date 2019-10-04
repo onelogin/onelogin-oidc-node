@@ -19,6 +19,8 @@ var users = require('./routes/users');
 
 const OIDC_BASE_URI = `https://openid-connect.onelogin.com/oidc`;
 
+//  acr_values: 'onelogin:nist:level:1:re-auth'
+
 // Configure the OpenId Connect Strategy
 // with credentials obtained from OneLogin
 passport.use(new OneLoginStrategy({
@@ -97,7 +99,8 @@ app.use('/users', checkAuthentication, users);
 // they will be returned to the callback handler below
 app.get('/login', passport.authenticate('openidconnect', {
   successReturnToOrRedirect: "/",
-  scope: 'profile'
+  scope: 'profile',
+  login_hint: 'kelly'
 }));
 
 // Callback handler that OneLogin will redirect back to
