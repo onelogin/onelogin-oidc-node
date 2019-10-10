@@ -17,14 +17,12 @@ var OneLoginStrategy = require('passport-openidconnect').Strategy
 var index = require('./routes/index');
 var users = require('./routes/users');
 
-const OIDC_BASE_URI = `https://openid-connect.onelogin.com/oidc`;
-
 //  acr_values: 'onelogin:nist:level:1:re-auth'
 
 // Configure the OpenId Connect Strategy
 // with credentials obtained from OneLogin
 passport.use(new OneLoginStrategy({
-  issuer: OIDC_BASE_URI,
+  issuer: process.env.OIDC_BASE_URI,
   clientID: process.env.OIDC_CLIENT_ID,
   clientSecret: process.env.OIDC_CLIENT_SECRET,
   authorizationURL: `${OIDC_BASE_URI}/auth`,
