@@ -25,9 +25,9 @@ passport.use(new OneLoginStrategy({
   issuer: process.env.OIDC_BASE_URI,
   clientID: process.env.OIDC_CLIENT_ID,
   clientSecret: process.env.OIDC_CLIENT_SECRET,
-  authorizationURL: `${OIDC_BASE_URI}/auth`,
-  userInfoURL: `${OIDC_BASE_URI}/me`,
-  tokenURL: `${OIDC_BASE_URI}/token`,
+  authorizationURL: `${process.env.OIDC_BASE_URI}/auth`,
+  userInfoURL: `${process.env.OIDC_BASE_URI}/me`,
+  tokenURL: `${process.env.OIDC_BASE_URI}/token`,
   callbackURL: process.env.OIDC_REDIRECT_URI,
   passReqToCallback: true
 },
