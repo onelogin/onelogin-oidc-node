@@ -17,8 +17,10 @@ const { Strategy } = require('openid-client');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+var oidcIssuer = `https://${process.env.SUBDOMAIN}.onelogin.com/oidc/2`;
+
 const { Issuer } = require('openid-client');
-Issuer.discover('https://openid-connect.onelogin.com/oidc') // => Promise     // For EU instances use https://openid-connect-eu.onelogin.com/oidc/me
+Issuer.discover(oidcIssuer) // => Promise
   .then(function (issuer) {
     console.log('Discovered issuer %s', issuer);
 
@@ -33,19 +35,21 @@ Issuer.discover('https://openid-connect.onelogin.com/oidc') // => Promise     //
       scope: 'openid profile',
     }
 
-    const passReqToCallback = false; // optional, defaults to false, when true req is passed as a first
+    const passReqToCallback = true; // optional, defaults to false, when true req is passed as a first
                                      // argument to verify fn
 
     const usePKCE = 'S256'; // optional, defaults to false, when true the code_challenge_method will be
                           // resolved from the issuer configuration, instead of true you may provide
                           // any of the supported values directly, i.e. "S256" (recommended) or "plain"
 
-    passport.use('oidc', new Strategy({ client, params, passReqToCallback, usePKCE }, (tokenset, userinfo, done) => {
+    passport.use('oidc', new Strategy({ client, params, passReqToCallback, usePKCE }, (req, tokenset, userinfo, done) => {
       console.log('tokenset', tokenset);
       console.log('access_token', tokenset.access_token);
       console.log('id_token', tokenset.id_token);
       console.log('claims', tokenset.claims);
       console.log('userinfo', userinfo);
+
+      req.session.accessToken = tokenset.access_token;
 
       return done(null, userinfo)
     }));
@@ -118,16 +122,25 @@ app.get('/oauth/callback', passport.authenticate('oidc', {
 // revoke the access_token at OneLogin
 app.get('/logout', function(req, res){
 
-  request.post('https://openid-connect.onelogin.com/oidc/token/revocation',   // For EU instances use https://openid-connect-eu.onelogin.com/oidc/token/revocation
-    {
+  console.log('Revoke Token Request: ', {
     'form':{
       'client_id': process.env.OIDC_CLIENT_ID,
-      'client_secret': process.env.OIDC_CLIENT_SECRET,
       'token': req.session.accessToken,
       'token_type_hint': 'access_token'
     }
-  },function(err, respose, body){
+  })
 
+  request.post(oidcIssuer + '/token/revocation',
+    {
+    'form':{
+      'client_id': process.env.OIDC_CLIENT_ID,
+      'token': req.session.accessToken,
+      'token_type_hint': 'access_token'
+    }
+  },function(err, response, body){
+
+    console.log('Revocation Error: ', err)
+    console.log('Revocation Body: ', body)
     console.log('Session Revoked at OneLogin');
     res.redirect('/');
 
