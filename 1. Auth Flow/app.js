@@ -18,16 +18,17 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 //  acr_values: 'onelogin:nist:level:1:re-auth'
+const baseUri = `https://${ process.env.SUBDOMAIN }.onelogin.com/oidc/2`
 
 // Configure the OpenId Connect Strategy
 // with credentials obtained from OneLogin
 passport.use(new OneLoginStrategy({
-  issuer: process.env.OIDC_BASE_URI,
+  issuer: baseUri,
   clientID: process.env.OIDC_CLIENT_ID,
   clientSecret: process.env.OIDC_CLIENT_SECRET,
-  authorizationURL: `${process.env.OIDC_BASE_URI}/auth`,
-  userInfoURL: `${process.env.OIDC_BASE_URI}/me`,
-  tokenURL: `${process.env.OIDC_BASE_URI}/token`,
+  authorizationURL: `${baseUri}/auth`,
+  userInfoURL: `${baseUri}/me`,
+  tokenURL: `${baseUri}/token`,
   callbackURL: process.env.OIDC_REDIRECT_URI,
   passReqToCallback: true
 },
@@ -112,7 +113,7 @@ app.get('/oauth/callback', passport.authenticate('openidconnect', {
 // revoke the access_token at OneLogin
 app.get('/logout', function(req, res){
 
-  request.post(`https://openid-connect.onelogin.com/oidc/token/revocation`, {
+  request.post(`${baseUri}/token/revocation`, {
     'form':{
       'client_id': process.env.OIDC_CLIENT_ID,
       'client_secret': process.env.OIDC_CLIENT_SECRET,

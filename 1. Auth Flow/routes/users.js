@@ -19,9 +19,8 @@ router.get('/', function(req, res, next) {
 
 /* GET the profile of the current authenticated user */
 router.get('/profile', function(req, res, next) {
-
   request.get(
-    'https://openid-connect.onelogin.com/oidc/me',   // For EU instances use https://openid-connect-eu.onelogin.com/oidc/me
+    `https://${ process.env.SUBDOMAIN }.onelogin.com/oidc/2/me`,   
     {
     'auth': {
       'bearer': req.session.accessToken
