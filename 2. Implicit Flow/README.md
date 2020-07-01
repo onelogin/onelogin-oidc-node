@@ -3,6 +3,8 @@
 This sample app demonstrates how to authenticate users in single page apps
 and does not require any server side code.
 
+Note: Implicit flow is no longer recommended. Best practice is to use Auth Code Flow + PKCE.
+
 The sample makes use of a pure [Javascript OpenId Connect Client](https://github.com/IdentityModel/oidc-client-js). We have included a minified
 version of this client in `public/javascripts/oidc-client.min.js` or you can
 fetch the [latest version here](https://github.com/IdentityModel/oidc-client-js/tree/dev/dist).
