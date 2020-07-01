@@ -1,16 +1,19 @@
-# OneLogin OpenId Connect Auth Flow with PKCE
+# OneLogin OpenId Connect Auth Code Flow + PKCE example
 
-The sample is an [Express.js](https://expressjs.com/) app that uses
-[Passport.js](http://www.passportjs.org/) and the [Passport-OpenId-Connect](https://www.npmjs.com/package/passport-openid-connect)
-module for managing user authentication.
+Best practice for Single Page Applications is to use the OpenId Connect Auth Code + PKCE (Proof Code Key Exchange) flow. 
 
-It uses the OpenId Connect Auth Flow + Proof Key Code Exchange (PKCE) which is best suited to native/mobile apps where you do not want to embed the **client_secret** in your app.
+This sample app demonstrates authenticate users in single page apps
+and does not require any server side code.
 
-The sample tries to keep everything as simple as possible so only
-implements
-* Login - redirecting users to OneLogin for authentication
-* Logout - destroying the local session and revoking the token at OneLogin
-* User Info - fetching profile information from OneLogin
+The sample makes use of a pure [Javascript OpenId Connect Client](https://github.com/IdentityModel/oidc-client-js). We have included a minified
+version of this client in `public/javascripts/oidc-client.min.js` or you can
+fetch the [latest version here](https://github.com/IdentityModel/oidc-client-js/tree/dev/dist).
+
+We have kept this sample to minimum functionality. However the UserManager in OIDC Client
+library has many useful features for authenticating via popups, logging out, and
+getting user info. Check out the [wiki](https://github.com/IdentityModel/oidc-client-js/wiki) and [samples](https://github.com/IdentityModel/oidc-client-js/tree/dev/sample/public) in the Github repo.
+
+This sample uses the same OIDC client library as the Implicit example with the main difference being that the `response_type` is set to `code`. By switching to `code` the library will take care of the `code_challenge` and `code_verifier` exchange that is necessary for the PKCE flow.
 
 ## Setup
 In order to run this sample you need to setup an OpenId Connect
@@ -18,14 +21,19 @@ app in your OneLogin Admin portal.
 
 If you don't have a OneLogin developer account [you can sign up here](https://www.onelogin.com/developer-signup).
 
-1. Clone this repo
-2. Rename `.env.sample` to `.env` and update the **client_id** and **redirect_uri** for your app.
+Clone this repo and then update <b>/javascripts/main.js</b> with the <b>client_id</b> you
+obtained from OneLogin and the <b>subdomain</b> of your OneLogin
+account.
 
-*You need to make sure that the Redirect URI matches what you specified as the
-Redirect Uri when you setup your OIDC app connector in the OneLogin portal.*
+Note that with the Implicit flow the **client_secret** is not required.
+
+The sample will automatically set the **redirect_uri** to the host
+location that the sample is running on. You need to make sure that
+this matches what you specified as the Redirect Uri when you
+setup your OIDC app connector in the OneLogin portal.
 
 ## Run
-This sample uses an express app running on nodejs.
+This sample uses node to serve up the single home page.
 
 From the command line run
 ```
@@ -36,4 +44,4 @@ From the command line run
 ### Local testing
 By default these samples will run on `http://localhost:3000`.
 
-You will need to add your callback url to the list of approved **Redirect URIs** for your OneLogin OIDC app via the Admin portal. e.g. `http://localhost:3000/oauth/callback`
+You will need to add your callback url to the list of approved **Redirect URIs** for your OneLogin OIDC app via the Admin portal. e.g. `http://localhost:3000`

@@ -19,3 +19,7 @@ a {
 .btn:hover {
   background-color: #4682b4;
 }
+
+input {
+  width: 300px;
+}

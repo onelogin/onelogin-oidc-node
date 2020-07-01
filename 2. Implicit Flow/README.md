@@ -41,4 +41,4 @@ From the command line run
 ### Local testing
 By default these samples will run on `http://localhost:3000`.
 
-You will need to add your callback url to the list of approved **Redirect URIs** for your OneLogin OIDC app via the Admin portal. e.g. `http://localhost:3000/oauth/callback`
+You will need to add your callback url to the list of approved **Redirect URIs** for your OneLogin OIDC app via the Admin portal. e.g. `http://localhost:3000`
