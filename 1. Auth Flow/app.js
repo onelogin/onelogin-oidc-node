@@ -18,7 +18,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 //  acr_values: 'onelogin:nist:level:1:re-auth'
-const baseUri = `https://${ process.env.SUBDOMAIN }.onelogin.com/oidc/2`
+const baseUri = `${ process.env.OIDC_BASE_URI }/oidc/2`
 
 // Configure the OpenId Connect Strategy
 // with credentials obtained from OneLogin
