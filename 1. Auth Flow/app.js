@@ -1,6 +1,5 @@
 require('dotenv').config();
 
-var request = require('request');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -41,6 +40,7 @@ function(req, issuer, userId, profile, accessToken, refreshToken, params, cb) {
   console.log('params:', params);
 
   req.session.accessToken = accessToken;
+  req.session.idToken = params['id_token'];
 
   return cb(null, profile);
 }));
@@ -113,19 +113,17 @@ app.get('/oauth/callback', passport.authenticate('openidconnect', {
 // revoke the access_token at OneLogin
 app.get('/logout', function(req, res){
 
-  request.post(`${baseUri}/token/revocation`, {
-    'form':{
-      'client_id': process.env.OIDC_CLIENT_ID,
-      'client_secret': process.env.OIDC_CLIENT_SECRET,
-      'token': req.session.accessToken,
-      'token_type_hint': 'access_token'
-    }
-  },function(err, respose, body){
+  // End the local session
+  req.logout();
 
-    console.log('Session Revoked at OneLogin');
-    res.redirect('/');
+  // Redirect here after logout
+  // This needs to be registered in the OIDC app settings within OneLogin
+  let postLogoutUri = req.protocol + '://' + req.get('host');
 
-  });
+  // End the session at OneLogin and then redirect back to this site
+  let logoutUri = `${process.env.OIDC_BASE_URI}/oidc/2/logout?id_token_hint=${req.session.idToken}&post_logout_redirect_uri=${postLogoutUri}`;
+
+  res.redirect(logoutUri);
 });
 
 // catch 404 and forward to error handler
