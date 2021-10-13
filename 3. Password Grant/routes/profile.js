@@ -1,24 +1,29 @@
 var express = require('express');
 var router = express.Router();
-const request = require("request");
+const axios = require("axios");
 
 router.get('/', function(req, res, next) {
 
-  let options = {
-    method: 'GET',
-    auth: {
-      bearer: req.session.accessToken
-    },
-    uri: `https://openid-connect.onelogin.com/oidc/me`   // For EU instances use https://openid-connect-eu.onelogin.com/oidc/me
-  };
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${req.session.accessToken}`
+    }
+  }
 
-  request(options, function(error, response, body){
+  axios.get(`${process.env.OIDC_BASE_URI}/oidc/2/me`, config)
+  .then(function(response){
 
-    let user = JSON.parse(body);
+    if(response.status != 200){
+      res.redirect("/");
+    }
 
     res.render('profile', {
-      user: user
-    })
+      user: response.data
+    }) 
+  })
+  .catch(function(error){
+    console.log(error);
   });
 });
 

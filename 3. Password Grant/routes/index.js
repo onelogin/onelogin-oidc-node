@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-const request = require("request");
+const axios = require("axios");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'OneLogin OpenId Connect Sample' });
+  res.render('index', { });
 });
 
 //
@@ -33,32 +33,41 @@ router.post('/login', function(req, res, next) {
   // When the Token Auth Endpoint Method is POST
   // then OIDC_CLIENT_ID & OIDC_CLIENT_PASSWORD
   // are specified in the post body
-  let options = {
-    method: 'POST',
-    uri: 'https://openid-connect.onelogin.com/oidc/token', // For EU instances use "https://openid-connect-eu.onelogin.com/oidc/token"
-    form: {
-      client_id: process.env.OIDC_CLIENT_ID,
-      client_secret: process.env.OIDC_CLIENT_SECRET,
-      grant_type: 'password',
-      username: req.body.username,
-      password: req.body.password,
-      scope: 'openid profile',
-      response_type: 'id_token'
+
+  const params = new URLSearchParams();
+  params.append('client_id', process.env.OIDC_CLIENT_ID);
+  params.append('client_secret', process.env.OIDC_CLIENT_SECRET);
+  params.append('grant_type', 'password');
+  params.append('username', req.body.username);
+  params.append('password', req.body.password);
+  params.append('scope', 'openid profile');
+  params.append('response_type', 'id_token');
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
-  };
+  }
 
-  request(options, function(error, response, body){
+  axios.post(`${process.env.OIDC_BASE_URI}/oidc/2/token`, params, config)
+  .then(function(response){
 
-    if(error){
-      res.redirect('/');
-    }else{
-
-      let token = JSON.parse(body)
-
-      req.session.accessToken = token.access_token;
-
-      res.redirect('/profile');
+    if(response.status != 200){
+      return res.render('index', {
+        error_message: "Login failed"
+      });
     }
+
+    req.session.accessToken = response.data.access_token;
+    
+    res.redirect('/profile');    
+  })
+  .catch(function(error){
+    console.log("ERROR")
+    console.log(error)
+    res.render('index', {
+      error_message: error.response.data.error_description
+    })
   });
 });
 

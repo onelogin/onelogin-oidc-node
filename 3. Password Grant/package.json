@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.23.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "debug": "~2.6.3",
@@ -14,7 +15,6 @@
     "express-session": "^1.17.2",
     "hbs": "^4.1.2",
     "morgan": "^1.10.0",
-    "request": "^2.88.2",
     "serve-favicon": "~2.4.2"
   }
 }
