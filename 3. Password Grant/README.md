@@ -2,6 +2,8 @@
 
 This sample app demonstrates how to authenticate users using the Resource Owner Password Grant.
 
+**Note: This flow has been deprecated by the OAuth Working Group. While OneLogin still supports it, we do not recommend using it for new authentication projects.**
+
 With this example a singe OAuth2.0 style request is made to authenticate the user.
 
 * This flow does not support MFA. If MFA is required for the user the authentication
@@ -19,33 +21,42 @@ This sample makes use of the following apis:
 This is where the user authentication takes place. On success you will get an `access_token` which can be used to fetch info about the user.
 
 ```js
-let options = {
-  method: 'POST',
-  uri: `https://openid-connect.onelogin.com/oidc/token`,  // EU instance: https://openid-connect-eu.onelogin.com/oidc/token
-  form: {
-    client_id: process.env.OIDC_CLIENT_ID,
-    client_secret: process.env.OIDC_CLIENT_SECRET,
-    grant_type: 'password',
-    username: req.body.username,
-    password: req.body.password,
-    scope: 'openid profile',
-    response_type: 'id_token'
+
+  const params = new URLSearchParams();
+  params.append('client_id', process.env.OIDC_CLIENT_ID);
+  params.append('client_secret', process.env.OIDC_CLIENT_SECRET);
+  params.append('grant_type', 'password');
+  params.append('username', req.body.username);
+  params.append('password', req.body.password);
+  params.append('scope', 'openid profile');
+  params.append('response_type', 'id_token');
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }
-};
 
-request(options, function(error, response, body){
+  axios.post(`${process.env.OIDC_BASE_URI}/oidc/2/token`, params, config)
+  .then(function(response){
 
-  if(error){
-    res.redirect('/');
-  }else{
+    if(response.status != 200){
+      return res.render('index', {
+        error_message: "Login failed"
+      });
+    }
 
-    let token = JSON.parse(body)
-
-    req.session.accessToken = token.access_token;
-
-    res.redirect('/profile');
-  }
-});
+    req.session.accessToken = response.data.access_token;
+    
+    res.redirect('/profile');    
+  })
+  .catch(function(error){
+    console.log("ERROR")
+    console.log(error)
+    res.render('index', {
+      error_message: error.response.data.error_description
+    })
+  });
 ```
 
 ### Get user info
