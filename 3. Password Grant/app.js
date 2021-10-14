@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 var express = require('express');
+var handlebars  = require('express-handlebars');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -14,8 +15,12 @@ var profile = require('./routes/profile');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+app.engine('.hbs', handlebars({
+   extname: '.hbs',
+   layoutsDir: 'views',
+   defaultLayout: 'layout'
+  }));
+app.set('view engine', '.hbs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
