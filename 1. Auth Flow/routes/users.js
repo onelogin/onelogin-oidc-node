@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 /* GET the profile of the current authenticated user */
 router.get('/profile', function(req, res, next) {
   request.get(
-    `https://${ process.env.OIDC_BASE_URI }/oidc/2/me`,   
+    `${ process.env.OIDC_BASE_URI }/oidc/2/me`,   
     {
     'auth': {
       'bearer': req.session.accessToken
