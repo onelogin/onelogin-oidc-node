@@ -17,6 +17,6 @@
     "passport": "^0.4.1",
     "passport-openidconnect": "0.0.2",
     "request": "^2.88.2",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.5.0"
   }
 }
