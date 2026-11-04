@@ -29,6 +29,16 @@ jobs:
       - name: Black Duck Security Scan
         id: black-duck-security-scan
         uses: blackduck-inc/black-duck-security-scan@v2
+        env:
+          # One Black Duck project per repo, named owner/repo (what Detect infers from
+          # git when no package file names it), with one version, the default branch,
+          # that PR rapid scans compare against. Names inferred from package files
+          # collided across repos and drifted between branches.
+          DETECT_PROJECT_NAME: ${{ github.repository }}
+          DETECT_PROJECT_VERSION_NAME: ${{ github.event.repository.default_branch }}
+          # Report what each detector can see instead of failing the scan when, e.g., a
+          # package.json has no installed node_modules (FAILURE_ACCURACY_NOT_MET).
+          DETECT_ACCURACY_REQUIRED: NONE
         with:
           ### SCANNING: Required fields
           blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
