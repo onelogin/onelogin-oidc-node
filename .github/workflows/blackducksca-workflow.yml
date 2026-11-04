@@ -1,0 +1,53 @@
+# Quickstart: Black Duck Security Scan Action with blackducksca:
+#     https://docs.blackduck.com/r/bridge/latest/bridge-cli-guide/quickstart-black-duck-security-scan-action-with-black-duck-sca.html
+name: Black Duck Security Scan
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+      - release
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+      - release
+  workflow_dispatch: {}
+# GitHub token permissions for post-scan actions. Required for built-in GITHUB_TOKEN; if using a PAT with equivalent scopes, permissions block can be commented out.
+permissions:
+  contents: write               # Required to push changes or create fix branches
+  pull-requests: write          # Required to add comments or create fix pull requests
+jobs:
+  blackducksca:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v5
+
+      - name: Black Duck Security Scan
+        id: black-duck-security-scan
+        uses: blackduck-inc/black-duck-security-scan@v2
+        with:
+          ### SCANNING: Required fields
+          blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
+          blackducksca_token: ${{ secrets.BLACKDUCKSCA_TOKEN }}
+          ### GITHUB TOKEN
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Required when PR comments or sarif reports enabled
+          blackducksca_prComment_enabled: true
+          ### SARIF report parameters
+          blackducksca_reports_sarif_create: true  # Create SARIF report and upload it as artifact
+
+
+          ### SCAN CONFIGURATION: Uncomment below to enable
+          # blackducksca_waitForScan: true # Wait for scan completion before proceeding
+
+          ### Mark build status if policy violating issues are found
+          # mark_build_status: failure # Set to success, failure, or skip
+
+          ### Uncomment below configuration if Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: false
+
+          ### FIX PULL REQUEST CREATION: Uncomment below to enable
+          # blackducksca_fixpr_enabled: false
